@@ -51,7 +51,7 @@ en esta branch, editamos README.md de nuevp
 
 ```
 vi README.md
-...
+...hola mundo!
 git add README.md
 git commit
 ```
