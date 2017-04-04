@@ -133,4 +133,16 @@ int hoshen(int *red,int n)
   return 0;
 }
 
+void llenar(int *red,int n,float prob) {
+ int i;
+ for(i=0;i<n*n;i=i+1){
+  red[i]=rand()%100/100; 
+  if(red[i]<prob){
+   red[i]=0;
+  }
+  else {
+   red[i]=1;
+  }
+ }
+}
 
