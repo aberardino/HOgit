@@ -3,11 +3,43 @@
 #include<math.h>
 #include<time.h>
 
-//defino y declaro la función llenar
-void llenar(int *red,int m, int n,float proba) {
+//declaro las funciones que voy a usar
+void llenar(int *red,int n,float prob);
+void imprimir(int *red,int n);
+
+
+//empieza la función main
+int main() {
+ 
+ //declaro las variables que voy a usar
+ int n;
+ int *red;
+ float prob;
+
+ //defino las variales que voy a usar
+ n = 10; //cantdad de columnas de la red
+ prob = 0.5; //la probabilidad de llenar la red
+ red = (int *)malloc(n*n*sizeof(int));
+  
+ //elijo la smilla del rand() variable según el reloj de la pc
+ srand(time(NULL));
+
+
+ llenar(red,n,prob);
+ imprimir(red,n);
+
+ return 0;
+ free(red);
+}
+
+
+//defino la función llenar
+void llenar(int *red,int n,float prob) {
  int i;
- for(i=0;i<n*m;i=i+1){
-  if(red[i]<proba){
+ float r;
+ for(i=0;i<n*n;i++){
+  r=rand()/(float)RAND_MAX; //rand() es un int, RAND_MAX es un int entonces la division si no es entero da 0 por eso hay que aclarar que lo tome como float
+  if(r<prob){
    red[i]=0;
   }
   else {
@@ -15,44 +47,15 @@ void llenar(int *red,int m, int n,float proba) {
   }
  }
 }
-//defino y declaro la función imprimir
-void imprimir(int *red,int m,int n) {
+
+//defino la función imprimir
+void imprimir(int *red,int n) {
  int i,j;
- for(j=0;j<n;j=j+1){
-  for(i=0;i<m;i=i+1){
-   printf("%d ",red[i+j*m]);
+ for(i=0;i<n;i++){
+  for(j=0;j<n;j++){
+   printf("%d ",red[i*n+j]);
   }
   printf("\n");
  }
-} 
-
-//empieza la función main
-int main(){
- int i,m,n;
- int *red;
- float proba;
-
- m = 10; //cantidad de filas de la red
- n = 10; //cantdad de columnas de la red
- proba = 50.0; //la probabilidad de llenar la red
- red = malloc(m*n*sizeof(float));
- 
- /*le asigno números aleatorios a la red del 0 al 100 con la misma semilla
- for(i=0;i<m*n;i=i+1){
-  red[i]=rand()%100;
- }
- */
- 
- //le asigno números aleatorios a la red del 0 al 100 con distinta semilla
- srand(time(NULL));
- for(i=0;i<m*n;i=i+1){
-  red[i]=rand()%100;
- }
-  
-
- llenar(red,m,n,proba);
- imprimir(red,m,n);
-
- return 0;
- free(red);
 }
+
