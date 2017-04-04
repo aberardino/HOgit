@@ -72,7 +72,6 @@ void imprimir(int *red,int n) {
     Recibe el puntero que apunta a la red y asigna etiquetas 
     a cada fragmento de red.
   */ 
-  
 int hoshen(int *red,int n) {
 
   int i,j,k,s1,s2,frag;
@@ -142,7 +141,12 @@ int hoshen(int *red,int n) {
 
 //defino la función actualizar
 int  actualizar(int *red,int *clase,int s,int frag) {
-
+ /*
+ se fija cual es el valor de s. si es negaivo busca la etiqueta vedadra y se a asigna a la posicion actual.
+ Si s es cero tengo que asignar una etiqueta nueva, para eso tengo que aumentar frag en 1,signar esa etiqueta
+ a la posicion y devolver el nuevo valor de frag. 
+ Si asgnaste una etiqueta nueva tiene que actualizar el vector clase con esanueva etiqueta
+*/
 }
 
 //defino la función etiqueta_falsa
@@ -159,6 +163,11 @@ void etiqueta_falsa(int *red,int *clase,int s1,int s2) {
    clase[s2]=-s1;
    clase[s1]=s1;
    red[i]=s1;
+  }
+  if(s2<s1) {
+  clase[s1]=-s2;
+  clase[s2]=s2;
+  red[i]=s2;
   }
  }
 }
