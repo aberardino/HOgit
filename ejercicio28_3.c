@@ -147,10 +147,30 @@ int  actualizar(int *red,int *clase,int s,int frag) {
 
 //defino la función etiqueta_falsa
 void etiqueta_falsa(int *red,int *clase,int s1,int s2) {
-
+ int i;
+ if(red[i]) {
+  while(clase[s1]<0) {
+   s1=-clase[s1];
+  }
+  while(clase[s2]<0) {
+   s2=-clase[s2];
+  }
+  if(s1<s2) {
+   clase[s2]=-s1;
+   clase[s1]=s1;
+   red[i]=s1;
+  }
+ }
 }
 
 //defino la función corregir_etiqueta
 void corregir_etiqueta(int *red,int *clase,int n) {
-
+ int i,s;
+ for(i=0;i<n*n,i++) {
+  s=red[i];
+  while(clase[s]<0) {
+   s=-clase[s];
+   red[i]=s;
+  }
+ }
 }
