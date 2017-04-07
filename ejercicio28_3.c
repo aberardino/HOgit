@@ -23,7 +23,7 @@ int main() {
 
  //defino las variales que voy a usar
  n = 10; //cantdad de columnas de la red
- prob = 0.5; //la probabilidad de llenar la red
+ prob = 0.6; //la probabilidad de llenar la red
  red = (int *)malloc(n*n*sizeof(int));
   
  //elijo la smilla del rand() variable según el reloj de la pc
@@ -48,10 +48,10 @@ void llenar(int *red,int n,float prob) {
  for(i=0;i<n*n;i++){
   r=rand()/(float)RAND_MAX; //rand() es un int, RAND_MAX es un int entonces la division si no es entero da 0 por eso hay que aclarar que lo tome como float
   if(r<prob){
-   red[i]=0;
+   red[i]=1;
   }
   else {
-   red[i]=1;
+   red[i]=0;
   }
  }
 }
