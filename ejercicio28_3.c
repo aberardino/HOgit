@@ -10,6 +10,7 @@ int  hoshen(int *red,int n);
 int  actualizar(int *red,int *clase,int s,int frag);
 void etiqueta_falsa(int *red,int *clase,int s1,int s2);
 void corregir_etiqueta(int *red,int *clase,int n);
+int percola(int *red,int n);
 
 
 //empieza la función main
@@ -30,10 +31,10 @@ int main() {
 
 
  llenar(red,n,prob);
- imprimir(red,n);
  hoshen(red,n);
  printf("\n");
  imprimir(red,n);
+ percola(red,n);
 
  return 0;
  free(red);
@@ -198,4 +199,55 @@ void corregir_etiqueta(int *red,int *clase,int n) {
   }
   red[i]=s;
  }
+}
+
+//defino la función percola
+int percola(int *red,int n) {
+ /*
+ Creo dos vectores para la primer y ultima fila de la red. Me fijo qué
+ clusters están presentes en la primer fila y le pongo un 1 al nuevo 
+ vector en la posición del clúster. Ej (fila 02204070 -> vector 0101001)
+ Multiplico los dos vectores y me fijo si tienen algún 1, si es así entonces
+ la red percoló y la función devuelve un 1, si no, devuelve 0 
+ */
+ 
+ int *vecfila1;
+ int *vecfila2;
+ int j,k,l,s,i,perc,contador; 
+ 
+ perc = 0;
+ contador = 0;
+ vecfila1=(int *)malloc(n*n/2*sizeof(int));
+ vecfila2=(int *)malloc(n*n/2*sizeof(int));
+
+ for(k=0;k<n*n/2;k++) {
+  *(vecfila1+k)=0;
+  *(vecfila2+k)=0;
+ }
+
+ for(i=0;i<n;i++) {
+  s=red[i];
+  if(s>0) vecfila1[s]=1;
+ }
+
+ for(i=n*n-n;i<n*n;i++) {
+  s=red[i];
+  if(s>0) vecfila2[s]=1;
+ }
+ 
+ printf("\n");
+ for(j=0;j<n*n/2;j++) printf("%d ",vecfila1[j]);
+ printf("\n");
+ printf("\n");
+ for(j=0;j<n*n/2;j++) printf("%d ",vecfila2[j]);
+ printf("\n");
+
+ for(l=0;l<n*n/2;l++) {
+  contador = contador + vecfila1[l]*vecfila2[l];
+ }
+ if(contador>0) perc=1;
+
+ printf("\n%d\n\n",perc);
+
+ return perc;
 }
