@@ -250,4 +250,6 @@ int percola(int *red,int n) {
  printf("\n%d\n\n",perc);
 
  return perc;
+ free(vecfila1);
+ free(vecfila2);
 }
