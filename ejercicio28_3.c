@@ -60,7 +60,12 @@ void imprimir(int *red,int n) {
  int i,j;
  for(i=0;i<n;i++){
   for(j=0;j<n;j++){
-   printf("%d ",red[i*n+j]);
+   if(red[i*n+j]>9){
+    printf("%d ",red[i*n+j]);
+   }
+   else{
+    printf("%d  ",red[i*n+j]);
+   }
   }
   printf("\n");
  }
@@ -86,7 +91,7 @@ int hoshen(int *red,int n) {
   // primer elemento de la red
 
   s1=0;
-  frag=2;
+  frag=1;
   if (*red) frag=actualizar(red,clase,s1,frag);
   
   // primera fila de la red
@@ -142,44 +147,55 @@ int hoshen(int *red,int n) {
 //defino la función actualizar
 int  actualizar(int *red,int *clase,int s,int frag) {
  /*
- se fija cual es el valor de s. si es negaivo busca la etiqueta vedadra y se a asigna a la posicion actual.
+ se fija cual es el valor de s. si es negativo busca la etiqueta verdadera y se la asigna a la posicion actual.
  Si s es cero tengo que asignar una etiqueta nueva, para eso tengo que aumentar frag en 1,signar esa etiqueta
  a la posicion y devolver el nuevo valor de frag. 
  Si asgnaste una etiqueta nueva tiene que actualizar el vector clase con esanueva etiqueta
 */
-}
+  if(s>0){ //si el vecino no es 0
+   while(clase[s]<0) { //busco la etiqueta verdadera de s
+    s=-clase[s];
+   }
+   *red=s; //le doy la etiqueta verdadera a red
+   clase[s]=s; //le asigno la etiqueta verdadera a clase
+  }
+ 
+  if(s==0) { //si los dos vecinos son 0, tengo que poner una etiqueta nueva
+   frag++;
+   *red=frag;
+   clase[frag]=frag;
+  } 
+  return frag; //devuelve frag para que actualice el valor, con clase no hace falta porque son posiciones de memoria que se llenan con algo, queda guardado
+ }
 
 //defino la función etiqueta_falsa
 void etiqueta_falsa(int *red,int *clase,int s1,int s2) {
- int i;
- if(red[i]) {
-  while(clase[s1]<0) {
+  while(clase[s1]<0) { //me fijo cuál es la etiqueta verdadera de s1
    s1=-clase[s1];
   }
-  while(clase[s2]<0) {
+  while(clase[s2]<0) { //me fijo cuál es la etiqueta verdadera de s2
    s2=-clase[s2];
   }
-  if(s1<s2) {
+  if(s1<s2) { //si la etiqueta de s1 es menor que la de s2 le pongo la de s1 a la red
    clase[s2]=-s1;
    clase[s1]=s1;
-   red[i]=s1;
+   *red=s1;
   }
-  if(s2<s1) {
+  else{ // si no le pongo la de s2
   clase[s1]=-s2;
   clase[s2]=s2;
-  red[i]=s2;
+  *red=s2;
   }
- }
 }
 
 //defino la función corregir_etiqueta
 void corregir_etiqueta(int *red,int *clase,int n) {
  int i,s;
- for(i=0;i<n*n,i++) {
+ for(i=0;i<n*n;i++) {
   s=red[i];
   while(clase[s]<0) {
    s=-clase[s];
-   red[i]=s;
   }
+  red[i]=s;
  }
 }
