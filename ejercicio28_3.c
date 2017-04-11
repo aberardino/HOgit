@@ -11,33 +11,75 @@ int  actualizar(int *red,int *clase,int s,int frag);
 void etiqueta_falsa(int *red,int *clase,int s1,int s2);
 void corregir_etiqueta(int *red,int *clase,int n);
 int percola(int *red,int n);
+void escribr(float *t, int n);
 
 
 //empieza la función main
 int main() {
  
  //declaro las variables que voy a usar
- int n;
+ int i,j,n,z,P;
  int *red;
- float prob;
+ float denominador,prob,probfinal,pc;
+ float *pfinal;
 
  //defino las variales que voy a usar
- n = 10; //cantdad de columnas de la red
- prob = 0.6; //la probabilidad de llenar la red
+ P = 16;  // 1/2^P, P=16 es la precision
+ z = 2000; //numero de iteraciones
+ n = 4; //tamaño del lado de la red
+ prob = 0.5; //la probabilidad de llenar la red
  red = (int *)malloc(n*n*sizeof(int));
+ pfinal = (float *)malloc(z*sizeof(float));
   
  //elijo la smilla del rand() variable según el reloj de la pc
- srand(time(NULL));
 
 
+ for(i=0;i<z;i++)
+ {
+  prob=0.5;
+  denominador=2.0;
+
+  srand(time(NULL));
+
+  for(j=0;j<P;j++)
+  {
+   llenar(red,n,prob);
+      
+   hoshen(red,n);
+        
+   denominador=2.0*denominador;
+
+   if (percola(red,n)) 
+   {
+    prob+=(-1.0/denominador); 
+   } 
+   else 
+   {
+    prob+=(1.0/denominador);
+   }
+  }
+  pfinal[i]=prob;
+ }
+
+ for(i=0;i<z;i++)
+ {
+ probfinal = probfinal + pfinal[i];
+ }
+ 
+ pc = probfinal/z;
+
+/* llena una red con probabilidad prob,hace hoshen la imprime y dice si percola
  llenar(red,n,prob);
  hoshen(red,n);
  printf("\n");
  imprimir(red,n);
  percola(red,n);
+*/
+ printf("%f\n",pc);
 
- return 0;
  free(red);
+ free(pfinal);
+ return 0;
 }
 
 
@@ -213,7 +255,8 @@ int percola(int *red,int n) {
  
  int *vecfila1;
  int *vecfila2;
- int j,k,l,s,i,perc,contador; 
+ int k,l,s,i,perc,contador;
+//int j; 
  
  perc = 0;
  contador = 0;
@@ -234,22 +277,39 @@ int percola(int *red,int n) {
   s=red[i];
   if(s>0) vecfila2[s]=1;
  }
- 
+
+/* imprime los vectores 
  printf("\n");
  for(j=0;j<n*n/2;j++) printf("%d ",vecfila1[j]);
  printf("\n");
  printf("\n");
  for(j=0;j<n*n/2;j++) printf("%d ",vecfila2[j]);
  printf("\n");
+*/
 
  for(l=0;l<n*n/2;l++) {
   contador = contador + vecfila1[l]*vecfila2[l];
  }
  if(contador>0) perc=1;
-
+/* imprime si percolo o no dando un 1 o un 0
  printf("\n%d\n\n",perc);
+*/
 
- return perc;
  free(vecfila1);
  free(vecfila2);
+ return perc;
 }
+
+//defino la funcion escribir
+void escribr(float *t, int n)
+{
+ int i;
+
+ FILE *fp; //fp es el nombre del archivo
+ fp=fopen("resultadosej1a.txt", "a"); //a es de apend, w para escribir y r para leer
+ for(i=0;i<n;i++) 
+ {
+  fprintf(fp,"%f\n",*(t+i));
+ }
+ fclose(fp);
+} 
