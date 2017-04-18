@@ -10,7 +10,7 @@ int  hoshen(int *red,int n);
 int  actualizar(int *red,int *clase,int s,int frag);
 void etiqueta_falsa(int *red,int *clase,int s1,int s2);
 void corregir_etiqueta(int *red,int *clase,int n);
-int percola(int *red,int n);
+int  percola(int *red,int n);
 void escribr(float *t, int n);
 
 
@@ -25,23 +25,24 @@ int main() {
 
  //defino las variales que voy a usar
  P = 16;  // 1/2^P, P=16 es la precision
- z = 2000; //numero de iteraciones
- n = 4; //tamaño del lado de la red
+ z = 2000; //numero de iteraciones, lo mínimo debería ser 27000
+ n = 32; //tamaño del lado de la red
  prob = 0.5; //la probabilidad de llenar la red
  red = (int *)malloc(n*n*sizeof(int));
  pfinal = (float *)malloc(z*sizeof(float));
+ srand(time(NULL));
   
- //elijo la smilla del rand() variable según el reloj de la pc
 
-
- for(i=0;i<z;i++)
+/*
+ //ejercicio 1.a)
+ for(i=0;i<z;i++) //loop de iteraciones
  {
   prob=0.5;
   denominador=2.0;
 
-  srand(time(NULL));
+  //srand(time(NULL)); //una semilla distinta por cada iteración
 
-  for(j=0;j<P;j++)
+  for(j=0;j<P;j++) //loop de precision, misma semilla para cada iteración
   {
    llenar(red,n,prob);
       
@@ -58,27 +59,58 @@ int main() {
     prob+=(1.0/denominador);
    }
   }
-  pfinal[i]=prob;
+  pfinal[i]=prob; //guardo la prob final en el vector pfinal
  }
 
- for(i=0;i<z;i++)
+ for(i=0;i<z;i++) 
  {
- probfinal = probfinal + pfinal[i];
+ probfinal = probfinal + pfinal[i]; //sumo las prob final de cada iteración
  }
  
- pc = probfinal/z;
+ pc = probfinal/z; //divido por el número de iteraciones
 
-/* llena una red con probabilidad prob,hace hoshen la imprime y dice si percola
- llenar(red,n,prob);
- hoshen(red,n);
- printf("\n");
- imprimir(red,n);
- percola(red,n);
+//// llena una red con probabilidad prob,hace hoshen la imprime y dice si percola
+// llenar(red,n,prob);
+// hoshen(red,n);
+// printf("\n");
+// imprimir(red,n);
+// percola(red,n);
+
+ printf("%f\n",pc); //muestro la prob final para esta la red de lado N
 */
- printf("%f\n",pc);
 
- free(red);
- free(pfinal);
+
+
+ //ejercicio 1.b)
+ int nPercolaciones;
+ float probClusterPerc;
+ nPercolaciones = 0;
+ prob = 0;
+ z = 1000;
+
+ while(probClusterPerc<=0.5)
+ {
+  for(j=0;j<z;j++)
+  {  
+
+   llenar(red,n,prob);
+      
+   hoshen(red,n);
+
+   if(percola(red,n)) nPercolaciones+=1;
+
+  }
+  probClusterPerc = (float)nPercolaciones/(float)z;
+  prob += 0.001;
+ 
+ pc = prob;
+ printf("%f\t%f\n",probClusterPerc,pc);
+}
+ //comparar pc de 1.a con 1.b
+
+
+ free(red); //libero espacio de memoria de red
+ free(pfinal); //libero espacio de memoria de pinal
  return 0;
 }
 
@@ -87,6 +119,7 @@ int main() {
 void llenar(int *red,int n,float prob) {
  int i;
  float r;
+
  for(i=0;i<n*n;i++){
   r=rand()/(float)RAND_MAX; //rand() es un int, RAND_MAX es un int entonces la division si no es entero da 0 por eso hay que aclarar que lo tome como float
   if(r<prob){
@@ -97,6 +130,7 @@ void llenar(int *red,int n,float prob) {
   }
  }
 }
+
 
 //defino la función imprimir
 void imprimir(int *red,int n) {
@@ -113,6 +147,7 @@ void imprimir(int *red,int n) {
   printf("\n");
  }
 }
+
 
 //defino la función hoshen
   /*
@@ -187,6 +222,7 @@ int hoshen(int *red,int n) {
   return 0;
 }
 
+
 //defino la función actualizar
 int  actualizar(int *red,int *clase,int s,int frag) {
  /*
@@ -211,6 +247,7 @@ int  actualizar(int *red,int *clase,int s,int frag) {
   return frag; //devuelve frag para que actualice el valor, con clase no hace falta porque son posiciones de memoria que se llenan con algo, queda guardado
  }
 
+
 //defino la función etiqueta_falsa
 void etiqueta_falsa(int *red,int *clase,int s1,int s2) {
   while(clase[s1]<0) { //me fijo cuál es la etiqueta verdadera de s1
@@ -224,12 +261,18 @@ void etiqueta_falsa(int *red,int *clase,int s1,int s2) {
    clase[s1]=s1;
    *red=s1;
   }
-  else{ // si no le pongo la de s2
+  if(s2<s1){ // si no le pongo la de s2
   clase[s1]=-s2;
   clase[s2]=s2;
   *red=s2;
   }
+  if(s1==s2){
+  clase[s1]=s2;
+  clase[s2]=s2;
+  *red=s2;
+  }
 }
+
 
 //defino la función corregir_etiqueta
 void corregir_etiqueta(int *red,int *clase,int n) {
@@ -242,6 +285,7 @@ void corregir_etiqueta(int *red,int *clase,int n) {
   red[i]=s;
  }
 }
+
 
 //defino la función percola
 int percola(int *red,int n) {
@@ -299,6 +343,7 @@ int percola(int *red,int n) {
  free(vecfila2);
  return perc;
 }
+
 
 //defino la funcion escribir
 void escribr(float *t, int n)
