@@ -84,12 +84,13 @@ int main() {
  //ejercicio 1.b)
  int nPercolaciones;
  float probClusterPerc;
- nPercolaciones = 0;
+ probClusterPerc = 0.0;
  prob = 0;
  z = 1000;
 
  while(probClusterPerc<=0.5)
  {
+  nPercolaciones = 0;
   for(j=0;j<z;j++)
   {  
 
@@ -101,13 +102,13 @@ int main() {
 
   }
   probClusterPerc = (float)nPercolaciones/(float)z;
+  pc = prob;
   prob += 0.001;
  
- pc = prob;
- printf("%f\t%f\n",probClusterPerc,pc);
-}
- //comparar pc de 1.a con 1.b
 
+ printf("%f\t%f\n",probClusterPerc,pc);
+ }
+ //comparar pc de 1.a con 1.b
 
  free(red); //libero espacio de memoria de red
  free(pfinal); //libero espacio de memoria de pinal
