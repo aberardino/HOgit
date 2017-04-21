@@ -20,20 +20,21 @@ int main() {
  //declaro las variables que voy a usar
  int i,j,n,z,P;
  int *red;
- float denominador,prob,probfinal,pc;
+ float denominador,prob,probfinal,pc,sumdisp,dispersion;
  float *pfinal;
 
  //defino las variales que voy a usar
  P = 16;  // 1/2^P, P=16 es la precision
  z = 2000; //numero de iteraciones, lo mínimo debería ser 27000
- n = 32; //tamaño del lado de la red
+ n = 64; //tamaño del lado de la red
  prob = 0.5; //la probabilidad de llenar la red
  red = (int *)malloc(n*n*sizeof(int));
  pfinal = (float *)malloc(z*sizeof(float));
  srand(time(NULL));
-  
+ sumdisp = 0.0;
+ dispersion = 0.0;
 
-/*
+
  //ejercicio 1.a)
  for(i=0;i<z;i++) //loop de iteraciones
  {
@@ -69,6 +70,14 @@ int main() {
  
  pc = probfinal/z; //divido por el número de iteraciones
 
+
+ for(i=0;i<z;i++)
+ {
+ sumdisp += (pfinal[i]-pc)*(pfinal[i]-pc);
+ }
+
+ dispersion = sqrt((1.0/(float)z)*sumdisp); 
+
 //// llena una red con probabilidad prob,hace hoshen la imprime y dice si percola
 // llenar(red,n,prob);
 // hoshen(red,n);
@@ -76,11 +85,11 @@ int main() {
 // imprimir(red,n);
 // percola(red,n);
 
- printf("%f\n",pc); //muestro la prob final para esta la red de lado N
-*/
+ printf("%f\t%f\n",pc,dispersion); //muestro la prob final para esta la red de lado N
 
 
 
+/*
  //ejercicio 1.b)
  int nPercolaciones;
  float probClusterPerc;
@@ -109,6 +118,8 @@ int main() {
  printf("%f\t%f\n",probClusterPerc,pc);
  }
  //comparar pc de 1.a con 1.b
+*/
+
 
  free(red); //libero espacio de memoria de red
  free(pfinal); //libero espacio de memoria de pinal
@@ -116,6 +127,7 @@ int main() {
 }
 
 
+//////////////////////////
 //defino la función llenar
 void llenar(int *red,int n,float prob) {
  int i;
@@ -133,6 +145,7 @@ void llenar(int *red,int n,float prob) {
 }
 
 
+//////////////////////////
 //defino la función imprimir
 void imprimir(int *red,int n) {
  int i,j;
@@ -150,6 +163,7 @@ void imprimir(int *red,int n) {
 }
 
 
+//////////////////////////
 //defino la función hoshen
   /*
     Esta funcion implementa en algoritmo de Hoshen-Kopelman.
@@ -224,6 +238,7 @@ int hoshen(int *red,int n) {
 }
 
 
+//////////////////////////
 //defino la función actualizar
 int  actualizar(int *red,int *clase,int s,int frag) {
  /*
@@ -249,6 +264,7 @@ int  actualizar(int *red,int *clase,int s,int frag) {
  }
 
 
+//////////////////////////
 //defino la función etiqueta_falsa
 void etiqueta_falsa(int *red,int *clase,int s1,int s2) {
   while(clase[s1]<0) { //me fijo cuál es la etiqueta verdadera de s1
@@ -275,6 +291,7 @@ void etiqueta_falsa(int *red,int *clase,int s1,int s2) {
 }
 
 
+//////////////////////////
 //defino la función corregir_etiqueta
 void corregir_etiqueta(int *red,int *clase,int n) {
  int i,s;
@@ -288,6 +305,7 @@ void corregir_etiqueta(int *red,int *clase,int n) {
 }
 
 
+//////////////////////////
 //defino la función percola
 int percola(int *red,int n) {
  /*
@@ -346,6 +364,7 @@ int percola(int *red,int n) {
 }
 
 
+//////////////////////////
 //defino la funcion escribir
 void escribr(float *t, int n)
 {
